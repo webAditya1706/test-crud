@@ -89,6 +89,8 @@ const allData = async (req, res) => {
     console.log('all data');
     try {
         if (data) {
+    console.log('------------------all data');
+
             res.status(200).json({
                 status: true,
                 message: data

@@ -1,0 +1,123 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Create crud operations",
+        "title": "Crud Operation Testing",
+        "version": "1.0.0"
+    },
+    "produces": ["application/json"],
+
+    "host": "localhost:5001/user",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "CRUD",
+            "description": "crud Operations"
+        },
+        {
+            "name": "ToDo List",
+            "description": "ToDo List Operations"
+        }
+    ],
+    "paths": {
+        "/create": {
+            "post": {
+                "tags": [
+                    "CRUD"
+                ],
+                "summary": "Create new user",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "document",
+                        "type": "file",
+                        "description": "User's profile image",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "email",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "password",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User created"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "CRUD"
+                ],
+                "summary": "Login User",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "Body",
+                        "description": "User login",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User login"
+                    }
+                }
+            }
+        },
+        "/all-data": {
+            "get": {
+                "tags": [
+                    "CRUD"
+                ],
+                "summary": "Get all data",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "type": "string",
+                        "required": true,
+                        "description": "Authorization header with a bearer token"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "Unsuccessful operation"
+                    }
+                }
+            }
+        }
+    }
+}
