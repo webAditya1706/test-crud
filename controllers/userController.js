@@ -4,11 +4,13 @@ const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 
 const createUser = async (req, res) => {
+
     try {
-        // const { name, email, password } = req.body;
         const validationError = await validationResult(req);
         const { name, email, password } = req.body;
-        const user = await userSchema({ name, email, password });
+        const document = await req.file.filename
+        console.log(document, "------------document");
+        const user = await userSchema({ name, email, password, document });
         const IsExist = await userSchema.findOne({ email });
         if (validationError?.errors?.length > 0) {
             res.status(402).json({
@@ -17,7 +19,6 @@ const createUser = async (req, res) => {
             })
         } else {
             if (IsExist) {
-                await user.save()
                 res.status(400).json({
                     status: false,
                     message: "This mail already used"
@@ -56,15 +57,15 @@ const userLogin = async (req, res) => {
         if (logData) {
             const comPass = await bcrypt.compare(password, logData.password);
             let secretKey = process.env.JWT_SECRET_KEY
-            const token = jwt.sign(logData._id, secretKey)
-            console.log(secretKey,'--------------secretKey');
-            console.log(token,'--------------token');
-            if (comPass) {
+            const token = jwt.sign({ _id: logData._id }, secretKey)
+            if (comPass && token) {
                 res.status(200).json({
                     status: true,
-                    message: "User Login"
+                    token,
+                    user: logData
                 })
-            } res.status(400).json({
+            }
+            res.status(400).json({
                 status: false,
                 message: "Incorrect email or password"
             })
@@ -85,6 +86,7 @@ const userLogin = async (req, res) => {
 
 const allData = async (req, res) => {
     const data = await userSchema.find();
+    console.log('all data');
     try {
         if (data) {
             res.status(200).json({
